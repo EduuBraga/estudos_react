@@ -1,43 +1,59 @@
+import { format, formatDistanceToNow } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+
 import { Comment } from '../comment/comment'
 import { Avatar } from '../avatar/avatar'
 
 import styles from './post.module.css'
 
-export function Post() {
+type Author = {
+  avatarUrl: string,
+  name: string,
+  role: string
+}
+
+interface post {
+  content: any,
+  author: Author,
+  publishedAt: Date
+}
+
+export function Post({ content, author, publishedAt }: post) {
+  const publishedDateFormatted = format(publishedAt, "dd 'de' LLLL 'ás' HH:mm'h'",
+    { locale: ptBR }
+  )
+
+  const pubishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true
+  })
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src="https://github.com/EduuBraga.png" />
+          <Avatar src={author.avatarUrl} />
 
           <div className={styles.authorInfo}>
-            <strong>Eduardo Braga</strong>
-            <span>Front-End</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time
-          title='01 de Fevereivo ás 13:36h'
-          dateTime='2023-02-01 13:36:04'
-        >
-          Publicado há 1h
+        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
+          {pubishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-        <p>
-          Acabei de subir mais um projeto no meu portifa. É um projeto que fiz
-          no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀
-        </p>
-        <p>
-          👉 <a href="#">jane.design/doctorcare</a>
-        </p>
-        <p>
-          <a href="#">#novoprojeto</a>
-          <a href="#"> #nlw</a>
-          <a href="#"> #rocketseat</a>
-        </p>
+        {content.map((line: { type: string, content: string }, index: number) => {
+          switch (line.type) {
+            case 'paragraph':
+              return <p key={index}>{line.content}</p>
+            case 'link':
+              return <p key={index}><a href='#'>{line.content}</a></p>
+          }
+        })}
       </div>
 
       <form className={styles.commentForm}>
