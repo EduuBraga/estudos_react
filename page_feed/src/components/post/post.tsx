@@ -5,6 +5,7 @@ import { Comment } from '../comment/comment'
 import { Avatar } from '../avatar/avatar'
 
 import styles from './post.module.css'
+import { useState } from 'react'
 
 type Author = {
   avatarUrl: string,
@@ -12,13 +13,27 @@ type Author = {
   role: string
 }
 
-interface post {
+interface Props {
   content: any,
   author: Author,
   publishedAt: Date
 }
 
-export function Post({ content, author, publishedAt }: post) {
+export function Post({ content, author, publishedAt }: Props) {
+  const [comments, setComments] = useState<string[]>(['Post muito massa hein?!'])
+  const [newCommentText, setNewCommentText] = useState('')
+
+  function handleCreateNewComment(event: any) {
+    event!.preventDefault()
+
+    setComments([...comments, newCommentText])
+    setNewCommentText('')
+  }
+
+  function handleNewCommentChange(event: any) {
+    setNewCommentText(event.target.value)
+  }
+
   const publishedDateFormatted = format(publishedAt, "dd 'de' LLLL 'ás' HH:mm'h'",
     { locale: ptBR }
   )
@@ -56,10 +71,12 @@ export function Post({ content, author, publishedAt }: post) {
         })}
       </div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
 
         <textarea
+          value={newCommentText}
+          onChange={handleNewCommentChange}
           placeholder='Deixe um comentário'
         />
 
@@ -69,9 +86,9 @@ export function Post({ content, author, publishedAt }: post) {
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map(comment => {
+          return (<Comment content={comment} />)
+        })}
       </div>
     </article>
   )
