@@ -34,6 +34,13 @@ export function Post({ content, author, publishedAt }: Props) {
     setNewCommentText(event.target.value)
   }
 
+  function deleteComment (commentToDelete: string) {
+    const commentsWithoutDeletedOne = comments
+      .filter(comment => comment !== commentToDelete)
+
+    setComments(commentsWithoutDeletedOne)
+  }
+
   const publishedDateFormatted = format(publishedAt, "dd 'de' LLLL 'ás' HH:mm'h'",
     { locale: ptBR }
   )
@@ -87,7 +94,13 @@ export function Post({ content, author, publishedAt }: Props) {
 
       <div className={styles.commentList}>
         {comments.map(comment => {
-          return (<Comment content={comment} />)
+          return ( 
+            <Comment 
+              key={comment} 
+              content={comment} 
+              onDeleteComment={deleteComment}
+            />
+          )
         })}
       </div>
     </article>
