@@ -29,9 +29,10 @@ export function Post({ content, author, publishedAt }: Props) {
     setComments([...comments, newCommentText])
     setNewCommentText('')
   }
-
+  
   function handleNewCommentChange(event: any) {
     setNewCommentText(event.target.value)
+    console.log(event)
   }
 
   function deleteComment (commentToDelete: string) {
@@ -49,6 +50,8 @@ export function Post({ content, author, publishedAt }: Props) {
     locale: ptBR,
     addSuffix: true
   })
+
+  const isCommentTextEmpty = newCommentText.length === 0
 
   return (
     <article className={styles.post}>
@@ -84,11 +87,14 @@ export function Post({ content, author, publishedAt }: Props) {
         <textarea
           value={newCommentText}
           onChange={handleNewCommentChange}
+          required
           placeholder='Deixe um comentário'
         />
 
         <footer>
-          <button type='submit'>Publicar</button>
+          <button type='submit' disabled={isCommentTextEmpty}>
+            Publicar
+          </button>
         </footer>
       </form>
 
