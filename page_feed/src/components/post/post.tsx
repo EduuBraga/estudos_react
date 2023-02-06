@@ -5,7 +5,7 @@ import { Comment } from '../comment/comment'
 import { Avatar } from '../avatar/avatar'
 
 import styles from './post.module.css'
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 
 type Author = {
   avatarUrl: string,
@@ -20,17 +20,17 @@ interface Props {
 }
 
 export function Post({ content, author, publishedAt }: Props) {
-  const [comments, setComments] = useState<string[]>(['Post muito massa hein?!'])
+  const [comments, setComments] = useState(['Post muito massa hein?!'])
   const [newCommentText, setNewCommentText] = useState('')
 
-  function handleCreateNewComment(event: any) {
+  function handleCreateNewComment(event: FormEvent) {
     event!.preventDefault()
 
     setComments([...comments, newCommentText])
     setNewCommentText('')
   }
   
-  function handleNewCommentChange(event: any) {
+  function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
     setNewCommentText(event.target.value)
     console.log(event)
   }
