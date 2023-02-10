@@ -1,10 +1,9 @@
-import { ButtonContainer, buttonVarient } from "./Button.styles"
+import { ButtonContainer } from "./Button.styles"
 
 interface buttonProps {
-  varient?: buttonVarient,
-  content: string
+  children: string
 }
 
-export function Button({ varient = 'primary', content }: buttonProps) {
-  return <ButtonContainer varient={varient}>{content}</ButtonContainer>
+export function Button({ children }: buttonProps) {
+  return <ButtonContainer>{children}</ButtonContainer>
 }
