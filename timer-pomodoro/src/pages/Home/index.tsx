@@ -22,7 +22,7 @@ export function Home() {
             placeholder="Dê um nome para o seu projeto"
           />
 
-          <datalist id='task-suggestion'>
+          <datalist id="task-suggestion">
             <option value="Melhorar notion" />
             <option value="Focar " />
             <option value="Estudar" />
